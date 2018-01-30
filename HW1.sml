@@ -1,20 +1,26 @@
-(*Checks to see if x is in list y*)
+(*1)Checks to see if x is in list y*)
 fun inList(x,y) = case y of 
     [] => false
     | (a::rest) => if a = x then true else inList(x,rest);
 
-(*removes values that occur in a list more than once*)
+(*2)removes values that occur in a list more than once*)
 fun removeDuplicates(x) = case x of
     [] => x
     | (a::rest) => if inList(a, rest) then removeDuplicates(rest) else  a :: removeDuplicates(rest); 
 
-(*checks a list and shows the duplicates*)
+(*3)checks a list and shows the duplicates*)
 fun listIntersect([], []) = []
     |listIntersect(x, []) = []
     |listIntersect([], y) = []
     |listIntersect(x::rest, y) = if inList( x, y) then x:: listIntersect(rest, y)
     else listIntersect(rest, y);
 
-fun range min step max = if (min + step) >= max then []
-    else if (min + step) < min then []
-    else  (min + step)::(range (min + step) step max);
+(*4)finds the values between min and max given*)
+fun range min step max = 
+    if (min = max) then []
+    else if step = 0 then []
+    else if min < max andalso step < 0 then []
+    else  (min)::(range (min + step) step max);
+
+(*5)shows numbers in a list that add up to less than the sum*)
+fun numbersToSum sum L = if L = [] then []
