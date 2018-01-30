@@ -23,4 +23,6 @@ fun range min step max =
     else  (min)::(range (min + step) step max);
 
 (*5)shows numbers in a list that add up to less than the sum*)
-fun numbersToSum sum L = if L = [] then []
+fun numbersToSum sum [] = []
+    |numbersToSum sum x::rest = if ((sum - x) > 0) then x::numbersToSum (sum - x) rest
+    else numbersToSum sum rest;
