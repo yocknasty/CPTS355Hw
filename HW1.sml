@@ -1,3 +1,4 @@
+(*Anthony Yockey*)
 (*1)Checks to see if x is in list y*)
 fun inList(x,y) = case y of 
     [] => false
@@ -34,7 +35,7 @@ fun replace n v L = case L of
     | x::rest => if (n - 1) < 0 then v::rest 
                 else x:: (replace (n - 1) v rest);
 
-(*7 Groups elements in the list to the left in a group the size of 'n'*)
+(*7.1) Groups elements in the list to the left in a group the size of 'n'*)
 fun groupNright n L = 
     let 
         fun group n [] buff = [buff]
@@ -44,13 +45,14 @@ fun groupNright n L =
     group n L []
     end;
 
+(*7.2) Groups elements in the list to the left in a group the size of 'n'*)
 fun groupNleft n L = 
     let 
         fun group n [] buff = [buff]
         | group n (x::rest) buff = if length(buff) = n then  buff::(group n rest [x]) 
                                     else group n rest (x::buff)
     in
-    group n L []
+    rev(group n (rev(L)) [])
     end;
 
 fun inList_Test () = 
@@ -164,6 +166,17 @@ fun groupNright_test () =
                 "test2: " ^ Bool.toString(groupNrightT2) ^ " " ^
                 "test3: " ^ Bool.toString(groupNrightT3) ^ " " ^
                 "test4: " ^ Bool.toString(groupNrightT4) ^ "\n")
+    end
+
+fun groupNleft_test () =
+    let
+        val groupNleftT1 = (groupNleft 2 [1, 2, 3, 4, 5] = [[1], [2, 3], [4, 5]])
+        val groupNleftT2 = (groupNleft 3 [1, 2, 3, 4, 5] = [[1, 2], [3, 4, 5]])
+       
+    in
+        print ("\n-----------------\n groupNleft: \n" ^
+                "test1: " ^ Bool.toString(groupNleftT1) ^ " " ^
+                "test2: " ^ Bool.toString(groupNleftT2) ^ "\n")
     end
 
 (* fun run_tests () =
