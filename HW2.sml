@@ -58,6 +58,8 @@ fun groupNleft n L =
 (*HW2 SECTIONS *****************************************************************)
 (*High order Functions from class work*)
 fun map f [] = [] | map f (x::rest) = (f x)::(map f rest);
+fun fold f base [] = base
+    | fold f base (x::rest) = f x (fold f base rest);
 
 (*1.a  countInList*)
 fun countInList List num = 
@@ -80,5 +82,16 @@ fun zipTail L1 L2 =
     end;
 
 (*1.c histogram*)
-fun histogram [] = []
-    | histogram l1 = map countInList l1; 
+fun histogram l1 =
+    let
+        val l2 = rev(removeDuplicates(l1))
+        val l3 = map (countInList l1) l2
+    in 
+    zipTail l2 l3
+    end;
+
+fun add x y = x + y;
+
+(*2.a deepsum*)
+fun deepsum [] = []
+    |deepsum l1 = fold add 0 l1;
