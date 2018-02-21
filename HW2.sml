@@ -93,5 +93,11 @@ fun histogram l1 =
 fun add x y = x + y;
 
 (*2.a deepsum*)
-fun deepsum [] = []
-    |deepsum l1 = fold add 0 l1;
+fun deepsum l1 = 
+    let 
+        fun add x y = x+y
+        val l2 = map(fold add 0) l1
+    in
+    fold add 0 l2
+    end;
+            
