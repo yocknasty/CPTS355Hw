@@ -90,14 +90,48 @@ fun histogram l1 =
     zipTail l2 l3
     end;
 
-fun add x y = x + y;
 
 (*2.a deepsum*)
-fun deepsum l1 = 
+fun deepSum l1 = 
     let 
         fun add x y = x+y
         val l2 = map(fold add 0) l1
     in
     fold add 0 l2
     end;
-            
+
+(*2b deepSumOption*)
+(*type deffinition for option*)
+datatype 'a option = NONE | SOME of 'a;
+
+fun deepSumOption l1 =
+    let 
+        fun addOption (NONE) (NONE) = NONE 
+            |addOption (NONE) (SOME x) = SOME x 
+            |addOption (SOME x) (NONE) = SOME x
+            |addOption (SOME x) (SOME y) = SOME ( x + y)
+        val l2 = map(fold addOption (NONE)) l1
+    in
+    fold addOption (NONE) l2
+    end;
+
+(*unzip*)
+fun unzip l1 = 
+    let
+        val l2 = map (fn (x,y)=> x) l1
+        val l3 = map (fn (x,y)=> y)  l1 
+    in
+    [l2, l3]
+    end;
+
+(*deffinition for either*)
+datatype  either = ImAString of string | ImAnInt of int;
+
+(*eitherTree*)
+datatype  eitherTree = LEAF of either | NODE of (either * eitherTree * eitherTree );
+
+(*4a eitherSerch*)
+fun eitherSearch x (LEAF (ImAnInt y)) = if y = x  then true else false
+    |eitherSearch x (NODE  (ImAnInt y), (NODE t1), (NODE t2)) = if y = x then true
+                                        else (eitherSearch x t1) (eitherSearch x t2);
+    
