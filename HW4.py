@@ -37,6 +37,11 @@ def lookup(name):
     name = name[0:]#pop off the /
     if name in dictstack[-1]:
         return dictstack[-1][name]
+    #check the rest of the stack
+    elif len(dictstack) > 1:
+        for i in dictstack[::-1]:
+            if name in i:
+                return i[name]
     else:
         print("Error: " + name + " not defined in dictionary stack" )
         return None
