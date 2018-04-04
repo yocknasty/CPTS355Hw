@@ -1,5 +1,12 @@
+#anthony Yockey
+#Code environment: linux mint
+
+
+import re
 #The opperand Stack
 opstack = []
+#dictionary stack
+dictstack = []
 
 #deffinitions of push and pop for opstack
 def opPop():
@@ -11,8 +18,7 @@ def opPop():
 def opPush(value):
     opstack.append(value)
 
-#dictionary stack
-dictstack = []
+
 
 #push and pop for dickstack
 def dictPop():
@@ -258,6 +264,52 @@ def psDef():
     else:
         print("Error: Stack does not have enough values")
 
+#Part2 functions
+#function from Hw assinment_______________________________
+def tokenize(s):
+    retValue = re.findall("/?[a-zA-Z][a-zA-Z0-9_]*|[[][a-zA-Z0-9_\s!][a-zA-Z0-9_\s!]*[]]|[-]?[0-9]+|[}{]+|%.*|[^ \t\n]", s)
+    return retValue
+
+def groupMatching(it):
+    res = []
+    for c in it:
+        if c== ')':
+            return res
+        else:
+            res.append(groupMatching(it))
+    return False
+
+def group(s):
+    if s[0]=='(':
+        return groupMatching(iter(s[1:]))
+    else:
+        return False
+def parseMatching(tokens):
+    res = []
+    for c in tokens:
+        if c == '}':
+            return res
+        else:
+            res.append(parseMatching())
+
+#uses string of tokens and calls and parses them out
+def parse(tokens):
+    pass
+
+#dictionary of function calls for the interperator
+functDict = {'add': add, 'sub':sub, 'mul':mul, 'div':div, 'mod':mod, 'length':length, 'get':get, 'dup':dup,
+             'exch':exch, 'pop':pop, 'roll':roll, 'copy':copy, 'clear':clear, 'stack':stack, 'dict':psDict,
+             'begin':begin, 'end':end, 'def':psDef}
+
+#interperet the code
+def interpert(code):
+
+    for call in code:
+        if isinstance(call, list) or call not in functDict.keys(): #check to see if its a command or a list
+            opPush(call)
+        else: #execute the function
+            functDict[call]()
+
 #####################################################################################################
 
 #------- Part 1 TEST CASES--------------
@@ -433,6 +485,12 @@ def testpsDef2():
     end()
     return True
 
+def testParse():
+    testcase = parse(tokenize("/fact{ 0 cool guy} def 5"))
+    if testcase != "/fact[ 0 cool guy] def 5":
+        return False
+    return True
+
 
 def main_part1():
     testCases = [('define',testDefine),('lookup',testLookup),('add', testAdd), ('sub', testSub),('mul', testMul),('div', testDiv),  ('mod', testMod), \
@@ -445,5 +503,20 @@ def main_part1():
         return ('Some tests failed', failedTests)
     else:
         return ('All part-1 tests OK')
+
+def test_part2():
+    def main_part1():
+        testCases = [('parse',testParse)]
+        # add you test functions to this list along with suitable names
+        failedTests = [testName for (testName, testProc) in testCases if not testProc()]
+        if failedTests:
+            # print(failedTests)
+            return ('Some tests failed', failedTests)
+        else:
+            return ('All part-2 tests OK')
+
+
 if __name__ == '__main__':
-    main_part1()
+    #main_part1()
+    #test_part2()
+    testParse()
